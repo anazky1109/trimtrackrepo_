@@ -1,19 +1,26 @@
-class TrimTrack:
-    def __init__(self):
-        self.records = []
+import json
+import os
 
-    def add_log(self, activity, duration):
-        if not activity:
-            raise ValueError("Nama aktivitas harus diisi")
-        if duration <= 0:
-            raise ValueError("Durasi harus lebih dari 0")
-        entry = {"activity": activity, "duration": duration}
-        self.records.append(entry)
-        return entry
+class BarberTracker:
+    def __init__(self, filename='bookings.json'):
+        self.filename = filename
+        self.bookings = self._load_data()
 
-    def get_total_duration(self):
-        return sum(item["duration"] for item in self.records)
+    def _load_data(self):
+        """Dyvta: Mengambil data dari file JSON"""
+        if os.path.exists(self.filename):
+            with open(self.filename, 'r') as f:
+                return json.load(f)
+        return []
 
-    def reset(self):
-        self.records = []
-        return True
+    def _save_data(self):
+        """Dyvta: Menyimpan data ke file JSON"""
+        with open(self.filename, 'w') as f:
+            json.dump(self.bookings, f, indent=4)
+
+    def add_booking(self, name, time):
+        # ... (Logika dari Reza akan masuk di sini) ...
+        new_entry = {"name": name, "time": time}
+        self.bookings.append(new_entry)
+        self._save_data() # Simpan otomatis
+        return "Berhasil!"
