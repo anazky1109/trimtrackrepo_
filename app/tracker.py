@@ -47,3 +47,16 @@ class BarberTracker:
         self.bookings.append(new_booking)
         self._save_data() # Memanggil fungsi Dyvta
         return f"SUCCESS: Booking untuk {customer_name} jam {service_time}:00"
+    
+    def get_schedule_report(self):
+        """Logika dari Talitha: Output Standar & Terurut"""
+        if not self.bookings:
+            return "Belum ada jadwal hari ini."
+        
+        # Urutkan berdasarkan jam (ascending)
+        sorted_list = sorted(self.bookings, key=lambda x: x["time"])
+        
+        report = "=== JADWAL BARBER HARI INI ===\n"
+        for b in sorted_list:
+            report += f"[{b['time']}:00] - {b['name']}\n"
+        return report
