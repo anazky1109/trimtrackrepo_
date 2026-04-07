@@ -5,57 +5,53 @@ class BarberTracker:
     def __init__(self, filename='bookings.json'):
         self.filename = filename
         self.bookings = self._load_data()
+        
+      
+        self.open_time = 9
+        self.close_time = 21
 
     def _load_data(self):
-        """Dyvta: Mengambil data dari file JSON"""
+        """Dyvta: Memuat data dari JSON"""
         if os.path.exists(self.filename):
-            with open(self.filename, 'r') as f:
-                return json.load(f)
+            try:
+                with open(self.filename, 'r') as f:
+                    return json.load(f)
+            except: return []
         return []
 
     def _save_data(self):
-        """Dyvta: Menyimpan data ke file JSON"""
+        """Dyvta: Menyimpan data ke JSON"""
         with open(self.filename, 'w') as f:
             json.dump(self.bookings, f, indent=4)
 
-    def add_booking(self, name, time):
-        # ... (Logika dari Reza akan masuk di sini) ...
-        new_entry = {"name": name, "time": time}
-        self.bookings.append(new_entry)
-        self._save_data() # Simpan otomatis
-        return "Berhasil!"
     def add_booking(self, customer_name, service_time):
-        """Logika dari Reza: Validasi Bentrok & Jam Operasional"""
+        """Reza: Validasi Bentrok & Jam Operasional"""
         if not customer_name:
             raise ValueError("Nama pelanggan tidak boleh kosong")
         
-        # Validasi Jam Operasional
+        # Sekarang self.open_time sudah ada, tidak akan error lagi
         if service_time < self.open_time or service_time >= self.close_time:
             raise ValueError(f"Barber tutup. Buka: {self.open_time}:00 - {self.close_time}:00")
         
-        # Validasi Anti-Collision (Cek jadwal bentrok)
         for b in self.bookings:
             if b["time"] == service_time:
-                return "FAILED: Jadwal sudah terisi, cari jam lain."
+                return "FAILED: Jadwal sudah terisi"
 
-        # Jika lolos validasi, simpan data
         new_booking = {
             "id": len(self.bookings) + 1,
             "name": customer_name,
             "time": service_time
         }
         self.bookings.append(new_booking)
-        self._save_data() # Memanggil fungsi Dyvta
-        return f"SUCCESS: Booking untuk {customer_name} jam {service_time}:00"
-    
+        self._save_data()
+        return f"SUCCESS: {customer_name} jam {service_time}:00"
+
     def get_schedule_report(self):
-        """Logika dari Talitha: Output Standar & Terurut"""
+        """Talitha: Standarisasi Output"""
         if not self.bookings:
             return "Belum ada jadwal hari ini."
         
-        # Urutkan berdasarkan jam (ascending)
         sorted_list = sorted(self.bookings, key=lambda x: x["time"])
-        
         report = "=== JADWAL BARBER HARI INI ===\n"
         for b in sorted_list:
             report += f"[{b['time']}:00] - {b['name']}\n"
