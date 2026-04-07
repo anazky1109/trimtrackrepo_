@@ -24,3 +24,26 @@ class BarberTracker:
         self.bookings.append(new_entry)
         self._save_data() # Simpan otomatis
         return "Berhasil!"
+    def add_booking(self, customer_name, service_time):
+        """Logika dari Reza: Validasi Bentrok & Jam Operasional"""
+        if not customer_name:
+            raise ValueError("Nama pelanggan tidak boleh kosong")
+        
+        # Validasi Jam Operasional
+        if service_time < self.open_time or service_time >= self.close_time:
+            raise ValueError(f"Barber tutup. Buka: {self.open_time}:00 - {self.close_time}:00")
+        
+        # Validasi Anti-Collision (Cek jadwal bentrok)
+        for b in self.bookings:
+            if b["time"] == service_time:
+                return "FAILED: Jadwal sudah terisi, cari jam lain."
+
+        # Jika lolos validasi, simpan data
+        new_booking = {
+            "id": len(self.bookings) + 1,
+            "name": customer_name,
+            "time": service_time
+        }
+        self.bookings.append(new_booking)
+        self._save_data() # Memanggil fungsi Dyvta
+        return f"SUCCESS: Booking untuk {customer_name} jam {service_time}:00"
