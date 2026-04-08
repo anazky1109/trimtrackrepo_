@@ -33,8 +33,11 @@ def main():
             try:
                 id_booking = int(input("Masukkan ID Booking yang akan dihapus: "))
                 if hasattr(barber, 'delete_log'): 
-                    barber.delete_log(id_booking)
-                    print("\n[SISTEM]: Booking berhasil dihapus.")
+                    try:
+                        barber.delete_log(id_booking)
+                        print("\n[SISTEM]: Booking berhasil dihapus.")
+                    except ValueError as e:
+                        print(f"\n[ERROR]: {e}")
                 else:
                     print("\n[SISTEM]: Fitur hapus belum diimplementasi.")
             except ValueError:

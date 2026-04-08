@@ -54,5 +54,13 @@ class BarberTracker:
         sorted_list = sorted(self.bookings, key=lambda x: x["time"])
         report = "=== JADWAL BARBER HARI INI ===\n"
         for b in sorted_list:
-            report += f"[{b['time']}:00] - {b['name']}\n"
+            report += f"[{b['time']}:00] - ID: {b['id']} - {b['name']}\n"
         return report
+
+    def delete_log(self, booking_id):
+        for i, b in enumerate(self.bookings):
+            if b["id"] == booking_id:
+                del self.bookings[i]
+                self._save_data()
+                return True
+        raise ValueError(f"Booking dengan ID {booking_id} tidak ditemukan.")
