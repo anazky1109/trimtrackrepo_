@@ -27,4 +27,4 @@ def test_talitha_report(temp_tracker):
     temp_tracker.add_booking("Z", 15)
     temp_tracker.add_booking("A", 9)
     report = temp_tracker.get_schedule_report()
-    assert "[9:00] - A" in report # Pastikan A (jam 9) muncul duluan
+    assert "[9:00] - ID: 2 - A" in report # Pastikan A (jam 9) muncul duluan
